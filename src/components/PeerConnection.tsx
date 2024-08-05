@@ -1,75 +1,95 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { start, call, hangup } from '../lib/webrtc'
 import { CameraIcon, Check, LeafIcon, MusicIcon, Phone, Power, Rocket, Search, SearchCheck } from 'lucide-react'
+import Peer from 'peerjs';
 
 export default function PeerConnection() {
-  const [isStarted, setIsStarted] = useState(false)
-  const [isCalling, setIsCalling] = useState(false)
-  const localVideoRef = useRef<HTMLVideoElement>(null)
-  const remoteVideoRef = useRef<HTMLVideoElement>(null)
+  const [peerId, setPeerId] = useState('');
+  const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
+  const [isCalling, setIsCalling] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+
+  const remoteVideoRef = useRef(null);
+  const currentUserVideoRef = useRef(null);
+  const peerInstance = useRef(null);
 
   useEffect(() => {
-    if (localVideoRef.current) {
-      localVideoRef.current.addEventListener('loadedmetadata', () => {
-        console.log(`Local video videoWidth: ${localVideoRef.current?.videoWidth}px, videoHeight: ${localVideoRef.current?.videoHeight}px`)
-      })
-    }
-    if (remoteVideoRef.current) {
-      remoteVideoRef.current.addEventListener('loadedmetadata', () => {
-        console.log(`Remote video videoWidth: ${remoteVideoRef.current?.videoWidth}px, videoHeight: ${remoteVideoRef.current?.videoHeight}px`)
-      })
-    }
+    const peer = new Peer();
+    
+    peer.on('open', (id) => {
+      setPeerId(id)
+    });
+
+    peer.on('call', (call) => {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((mediaStream) => {
+          currentUserVideoRef.current.srcObject = mediaStream;
+          currentUserVideoRef.current.play();
+          call.answer(mediaStream)
+          call.on('stream', function(remoteStream) {
+            remoteVideoRef.current.srcObject = remoteStream
+            remoteVideoRef.current.play();
+          });
+        })
+        .catch(err => {
+          console.error("Error accessing media devices.", err);
+        });
+    })
+
+    peerInstance.current = peer;
   }, [])
 
-  const handleStart = async () => {
-    const stream = await start()
-    if (localVideoRef.current && stream) {
-      localVideoRef.current.srcObject = stream
-      setIsStarted(true)
-    }
+  const call = (remotePeerId:string) => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((mediaStream) => {
+        currentUserVideoRef.current.srcObject = mediaStream;
+        currentUserVideoRef.current.play();
+
+        const call = peerInstance.current.call(remotePeerId, mediaStream)
+
+        call.on('stream', (remoteStream) => {
+          remoteVideoRef.current.srcObject = remoteStream
+          remoteVideoRef.current.play();
+        });
+      })
+      .catch(err => {
+        console.error("Error accessing media devices.", err);
+      });
   }
 
-  useEffect(() => {
-    handleStart()
-  }, [])
-  
-
-  const handleCall = async () => {
-    await call(remoteVideoRef.current!)
-    setIsCalling(true)
-  }
-
-  const handleHangup = () => {
-    hangup()
-    setIsCalling(false)
+  const hangup = () => {
+    currentUserVideoRef.current.srcObject = null;
+    remoteVideoRef.current.srcObject = null;
+    navigator.mediaDevices.getUserMedia({ video: false, audio: false })
   }
 
   return (
     <div className='flex flex-col h-screen p-4 max-h-screen'>
       <div className="flex flex-col flex-1 bg-black rounded-2xl overflow-hidden mb-4 relative">
-        
         <div className={`absolute top-2 left-2 text-5xl duration-500 ${isCalling ? "translate-y-0" : " -translate-y-40"}`}>🚺</div>
-        <video ref={localVideoRef} autoPlay muted playsInline className="w-1/5 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
+        <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/5 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
         <video ref={remoteVideoRef} autoPlay playsInline  className="w-full h-full mr-2" />
           
           <div className='bg-gray-400 bg-opacity-80 absolute bottom-7 right-[16.5%] items-center rounded-full text-xs px-3 py-1 font-semibold flex gap-x-2'><div className={`h-2 w-2 rounded-full ${isStarted ? "bg-green-500" : "bg-red-500"}`}></div>You</div>
           <div className='flex flex-col gap-y-2 absolute top-5 left-5'>
             <button
-              onClick={handleCall}
+              onClick={call}
               disabled={!isStarted || isCalling}
               className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-white disabled:brightness-75"
             >
               <Search className='text-black'/>
             </button>
             <button
-              onClick={handleHangup}
+              onClick={hangup}
               disabled={!isCalling}
               className="h-14 w-14 flex items-center justify-center rounded-xl bg-[#ec6761] text-white disabled:brightness-75"
             >
               <Power />
             </button>
+            <h2 className='text-white'>{peerId}</h2>
+            <input className='text-black' type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)} />
+            <button className='bg-red-500'  onClick={() => call(remotePeerIdValue)}>Call</button>
           </div>
           <div className="flex flex-col space-x-4 absolute bottom-5 left-5">    
             <UserCard />

@@ -8,6 +8,6 @@ const wallets = [inAppWallet()];
  
 export default function LoginButton() {
   return (
-      <ConnectButton client={client} wallets={wallets} />
+      <ConnectButton connectButton={{label:"Login"}} client={client} wallets={wallets} />
   );
 }

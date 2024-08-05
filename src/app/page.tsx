@@ -21,7 +21,6 @@ export default function Home() {
           <Link href="/">FAQ</Link>
           <Link href="/">Discord</Link>
           <LoginButton />
-          <button className='bg-brand text-black font-semibold px-5 py-2 rounded-full'>Login</button>
         </div>
       </nav>}
 
@@ -30,8 +29,8 @@ export default function Home() {
           <p className='text-4xl text-center sm:text-8xl  font-black text-black mt-5'>Chat Securely, Connect Confidently, Personalized Matches!</p>
           <p className=' text-xl text-center sm:text-2xl mt-5'>Coming out of your shell is hard. Omelette makes it easy.</p>
           <div className='flex items-center justify-center gap-x-5 mt-4'>
-            <button  onClick={()=>push("/connect")} className='bg-black text-white font-semibold text-lg rounded-full px-6 py-2'>Start Hatching</button>
-            <button className='bg-white  font-semibold text-lg rounded-full px-6 py-2'>Join Farm</button>
+            <button  onClick={()=>push("/connect")} className='bg-black relative z-10 text-white font-semibold text-lg rounded-full px-6 py-2'>Start Hatching</button>
+            <button className='bg-white  font-semibold text-lg relative z-10 rounded-full px-6 py-2'>Join Farm</button>
           </div>
         </div>
         <EggAnimation />

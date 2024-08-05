@@ -71,3 +71,13 @@
 #egg > svg {
   height: auto !important;
 }
+
+.tw-connect-wallet {
+  background: black !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border-radius: 50px !important;
+  font-size: 1rem !important;
+  padding: 0.6rem 0rem 0.6rem 0rem !important;
+  min-width: 100px !important;
+}
