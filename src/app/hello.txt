@@ -1,0 +1,79 @@
+{<nav className='flex justify-between items-center bg-transparent top-0 w-full px-20 py-10'>
+        <p className='text-xl font-semibold text-black'>Omellete.</p>
+        <div className='flex items-center gap-x-5 font-semibold'>
+          <Link href="/">Farm</Link>
+          <Link href="/">FAQ</Link>
+          <Link href="/">Discord</Link>
+          <button className='bg-black text-white font-semibold px-5 py-2 rounded-full'>Login</button>
+        </div>
+      </nav>}
+      <div className='grid grid-cols-3'>
+        <div className=' col-span-2 pb-10 sm:pb-0 sm:min-h-screen w-screen flex flex-col items-start justify-start relative p-20 pt-0'>
+          <Image 
+            src={Logo.src}
+            height={Logo.height}
+            width={Logo.width}
+            alt=''
+            className='absolute -top-[98%] z-[-1]'
+          />
+          <p className='text-4xl sm:text-7xl  font-black text-black mt-10'>Chat Securely,<br/> Connect Confidently,<br/> Personalized Matches!</p>
+          <p className=' text-sm w-1/2 sm:text-xl mt-5'>Connect with confidence using our secure chat app, where Aadhaar verification ensures only verified adults can join. Customize your experience with our gender filter, allowing you to chat with your preferred matches. Enjoy safe, personalized conversations and meet genuine people with ease.</p>
+          <div className='flex items-center gap-x-5 mt-10'>
+            <button  onClick={()=>push("/connect")} className='bg-black text-white font-semibold text-lg rounded-full px-6 py-2'>Start Hatching</button>
+            <button className='bg-white font-semibold  text-lg rounded-full px-6 py-2'>Join Farm</button>
+          </div>
+        </div>
+        <div className='flex flex-col justify-center col-span-1 items-center'>
+          <div className='bg-white rotate-[30deg] rounded-2xl p-5  w-2/3'>
+              <div className='h-20 w-20 bg-[#86c2f1] rounded-2xl mx-auto'>
+
+              </div>
+              <div className='flex items-center justify-center gap-x-1 mt-2'>
+                <p className='font-semibold text-center'>tanjiro.<span className='text-orange-500 font-semibold'>eth</span></p>
+                <p className='bg-orange-500 w-fit p-0.5 rounded-full'><Check  className='h-2.5 w-2.5 text-white'/></p>
+              </div>
+             
+              <div className='flex justify-center flex-wrap gap-2 mt-4'>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><CameraIcon className='h-3 w-3'/> Movies</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><LeafIcon className='h-3 w-3'/> Nature</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+              </div>
+          </div>
+          <div className='bg-white rotate-[20deg] shadow -translate-y-20 rounded-2xl p-5  w-2/3'>
+              <div className='h-20 w-20 bg-yellow-400 rounded-2xl mx-auto'>
+
+              </div>
+              <div className='flex items-center justify-center gap-x-1 mt-2'>
+                <p className='font-semibold text-center'>tanjiro.<span className='text-orange-500 font-semibold'>eth</span></p>
+                <p className='bg-orange-500 w-fit p-0.5 rounded-full'><Check  className='h-2.5 w-2.5 text-white'/></p>
+              </div>
+             
+              <div className='flex justify-center flex-wrap gap-2 mt-4'>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><CameraIcon className='h-3 w-3'/> Movies</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><LeafIcon className='h-3 w-3'/> Nature</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+              </div>
+          </div>
+          <div className='bg-white rotate-6 shadow rounded-2xl p-5 -translate-y-32  w-2/3'>
+              <div className='h-20 w-20 bg-orange-500 rounded-2xl mx-auto'>
+
+              </div>
+              <div className='flex items-center justify-center gap-x-1 mt-2'>
+                <p className='font-semibold text-center'>tanjiro.<span className='text-orange-500 font-semibold'>eth</span></p>
+                <p className='bg-orange-500 w-fit p-0.5 rounded-full'><Check  className='h-2.5 w-2.5 text-white'/></p>
+              </div>
+             
+              <div className='flex justify-center flex-wrap gap-2 mt-4'>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><CameraIcon className='h-3 w-3'/> Movies</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><LeafIcon className='h-3 w-3'/> Nature</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+                <div className='border px-3 text-sm rounded-full flex items-center gap-2'><MusicIcon className='h-3 w-3'/> Music</div>
+              </div>
+          </div>
+        </div>
+      </div>

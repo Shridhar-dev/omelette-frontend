@@ -1,10 +1,9 @@
+"use client"
 import './globals.css'
-import type { Metadata } from 'next'
+import { Montserrat } from 'next/font/google'
+import { ThirdwebProvider } from "thirdweb/react";
 
-export const metadata: Metadata = {
-  title: 'WebRTC Peer Connection',
-  description: 'WebRTC peer connection example using Next.js',
-}
+const inter = Montserrat({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
@@ -13,7 +12,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>
+        <ThirdwebProvider>
+          {children}
+        </ThirdwebProvider>
+      </body>
     </html>
   )
 }
