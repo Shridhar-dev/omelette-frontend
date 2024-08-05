@@ -42,7 +42,7 @@ export default function Home() {
         </div>
         <div className='border-l border-brand p-10'>
           <p className='text-4xl md:text-7xl font-black md:leading-[5rem]'>Verify your Identify. Make new Frens</p>
-          <p className='mt-5 text-xl leading-10'>Introducing our revolutionary chat app that puts safety and personalization at the forefront of your online interactions. With Aadhaar-based verification, we ensure that only verified adults can join the conversation, creating a secure environment where you can connect with confidence. Whether you're looking to meet new friends, engage in meaningful conversations, or simply pass the time, our app offers a seamless experience tailored to your preferences. Our intuitive gender filter allows you to choose whether you want to chat with males or females, giving you the power to customize your connections. Say goodbye to the uncertainty of anonymous chats and hello to a community of genuine, like-minded individuals. Join us today and discover the difference of chatting with confidence!</p>
+          <p className='mt-5 text-xl leading-10'>Introducing our revolutionary chat app that puts safety and personalization at the forefront of your online interactions. With Aadhaar-based verification, we ensure that only verified adults can join the conversation, creating a secure environment where you can connect with confidence. Whether youre looking to meet new friends, engage in meaningful conversations, or simply pass the time, our app offers a seamless experience tailored to your preferences. Our intuitive gender filter allows you to choose whether you want to chat with males or females, giving you the power to customize your connections. Say goodbye to the uncertainty of anonymous chats and hello to a community of genuine, like-minded individuals. Join us today and discover the difference of chatting with confidence!</p>
         </div>
       </div>
       {/*<div className='min-h-screen py-10 flex flex-col items-center relative justify-center bg-black bg-opacity-[2%] w-full'>
@@ -61,7 +61,7 @@ export default function Home() {
         </div>
         <div className='border-t border-b md:border-t md:border-b md:border-l md:border-r border-brand md:px-10 py-10'>
           <p className='mb-2'>WHY POLYGON?</p>
-          <p>Earth first. Polygon's eco-friendly blockchain allows each publication on Lens Protocol to have a low carbon footprint while being on a low-cost, secure blockchain.</p>
+          <p>Earth first. Polygon&apos; eco-friendly blockchain allows each publication on Lens Protocol to have a low carbon footprint while being on a low-cost, secure blockchain.</p>
         </div>
         <div className='md:pl-10 py-10'>
           <p className='mb-2'>LEARN MORE</p>
