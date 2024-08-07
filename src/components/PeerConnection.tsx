@@ -164,7 +164,17 @@ export default function PeerConnection() {
   const getCalleeId = async() => {
     if(peerId.length === 0) return;
     const body = JSON.stringify({connectionId:peerId, category:"HACKERHOUSE"});
-    const response = await fetch(`https://aab-plum.vercel.app/api/connect`,{
+    window.onbeforeunload = (event) => {
+      const response = await fetch(`https://aab-plum.vercel.app/api/connection/disconnect`,{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json",
+        },
+        body
+      });
+    };
+
+    const response = await fetch(`https://aab-plum.vercel.app/api/connection/connect`,{
       method:"POST",
       headers:{
           "Content-Type": "application/json",
