@@ -52,7 +52,7 @@ export default function PeerConnection() {
             credential: "Wd33VTkVy8vG3bLz",
           },
         ],
-        secure: false
+        secure: true
       }
     });
     
