@@ -22,6 +22,7 @@ export default function PeerConnection() {
   const userStreamRef = useRef(null);
 
   var iceArray = [{ "Credential": null, "Username": null, "Url": "stun:global.stun.twilio.com:3478?transport=udp", "Urls": "stun:global.stun.twilio.com:3478?transport=udp" }];
+  let firstTimeLock = true;
   useEffect(() => {
     setIsSecureContext(window.isSecureContext);
 
@@ -160,6 +161,21 @@ export default function PeerConnection() {
     navigator.mediaDevices.getUserMedia({ video: false, audio: false })
   }
 
+  const getCalleeId = async() => {
+    if(peerId.length === 0) return;
+    const body = JSON.stringify({connectionId:peerId, category:"HACKERHOUSE"});
+    const response = await fetch(`${process.env.PRODUCTION_URL}/connect`,{
+      method:"POST",
+      headers:{
+          "Content-Type": "application/json",
+      },
+      body
+    });
+    const { calleeId } = await response.json();
+    if(calleeId === "") setIsCalling(true);
+    else call(calleeId);
+  }
+
   return (
     <div className='flex flex-col h-screen p-4 max-h-screen'>
       <div className="flex flex-col flex-1 bg-black rounded-2xl overflow-hidden mb-4 relative">
@@ -170,8 +186,8 @@ export default function PeerConnection() {
           <div className='bg-gray-400 bg-opacity-80 absolute bottom-7 right-[16.5%] items-center rounded-full text-xs px-3 py-1 font-semibold flex gap-x-2'><div className={`h-2 w-2 rounded-full ${isStarted ? "bg-green-500" : "bg-red-500"}`}></div>You</div>
           <div className='flex flex-col gap-y-2 absolute top-5 left-5'>
             <button
-              onClick={call}
-              disabled={!isStarted || isCalling}
+              onClick={getCalleeId}
+              //disabled={!isStarted || isCalling}
               className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-white disabled:brightness-75"
             >
               <Search className='text-black'/>
