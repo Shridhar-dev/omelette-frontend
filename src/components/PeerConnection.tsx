@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { CameraIcon, Check, LeafIcon, MusicIcon, Phone, Power, Rocket, Search, SearchCheck } from 'lucide-react'
+import { CameraIcon, Check, LeafIcon, MicIcon, MicOffIcon, MusicIcon, Phone, Power, Rocket, Search, SearchCheck, VideoIcon, VideoOffIcon } from 'lucide-react'
 import Peer from 'peerjs';
 
 export default function PeerConnection() {
@@ -10,46 +10,58 @@ export default function PeerConnection() {
   const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
   const [isCalling, setIsCalling] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-
+  const [isSecureContext, setIsSecureContext] = useState(true);
+  const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState('');
+  const [isMicOn, setIsMicOn] = useState(true);
+  const [isVideoOn, setIsVideoOn] = useState(true);
   const remoteVideoRef = useRef(null);
   const currentUserVideoRef = useRef(null);
   const peerInstance = useRef(null);
+  const connectionRef = useRef(null);
+  const userStreamRef = useRef(null);
 
   useEffect(() => {
-    const peer = new Peer();
+    setIsSecureContext(window.isSecureContext);
+
+    const peer = new Peer(undefined, {
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478' },
+          // Add your TURN server here
+        ]
+      }
+    });
     
     peer.on('open', (id) => {
       setPeerId(id)
     });
 
     peer.on('call', (call) => {
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then((mediaStream) => {
-          currentUserVideoRef.current.srcObject = mediaStream;
-          currentUserVideoRef.current.play();
-          call.answer(mediaStream)
-          call.on('stream', function(remoteStream) {
-            remoteVideoRef.current.srcObject = remoteStream
-            remoteVideoRef.current.play();
-          });
-        })
-        .catch(err => {
-          console.error("Error accessing media devices.", err);
-        });
-    })
+      if (isSecureContext) {
+        handleIncomingCall(call);
+      } else {
+        alert("Incoming call received, but video is not available in non-secure context. You can use text chat.");
+      }
+    });
+
+    peer.on('connection', (conn) => {
+      connectionRef.current = conn;
+      setupConnectionListeners(conn);
+    });
 
     peerInstance.current = peer;
-  }, [])
+  }, [isSecureContext]);
 
-  const call = (remotePeerId:string) => {
+  const handleIncomingCall = (call) => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((mediaStream) => {
+        userStreamRef.current = mediaStream;
         currentUserVideoRef.current.srcObject = mediaStream;
         currentUserVideoRef.current.play();
-
-        const call = peerInstance.current.call(remotePeerId, mediaStream)
-
-        call.on('stream', (remoteStream) => {
+        call.answer(mediaStream)
+        call.on('stream', function(remoteStream) {
           remoteVideoRef.current.srcObject = remoteStream
           remoteVideoRef.current.play();
         });
@@ -57,6 +69,67 @@ export default function PeerConnection() {
       .catch(err => {
         console.error("Error accessing media devices.", err);
       });
+  }
+
+  const call = (remotePeerId) => {
+    if (isSecureContext) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((mediaStream) => {
+          userStreamRef.current = mediaStream;
+          currentUserVideoRef.current.srcObject = mediaStream;
+          currentUserVideoRef.current.play();
+
+          const call = peerInstance.current.call(remotePeerId, mediaStream)
+
+          call.on('stream', (remoteStream) => {
+            remoteVideoRef.current.srcObject = remoteStream
+            remoteVideoRef.current.play();
+          });
+        })
+        .catch(err => {
+          console.error("Error accessing media devices.", err);
+        });
+    } else {
+      alert("Video call is not available in non-secure context. You can use text chat.");
+    }
+
+    const conn = peerInstance.current.connect(remotePeerId);
+    connectionRef.current = conn;
+    setupConnectionListeners(conn);
+  }
+
+  const setupConnectionListeners = (conn) => {
+    conn.on('open', () => {
+      console.log("Text chat connection established");
+    });
+
+    conn.on('data', (data) => {
+      setMessages(prevMessages => [...prevMessages, { text: data, sender: 'remote' }]);
+    });
+  }
+
+  const sendMessage = () => {
+    if (currentMessage && connectionRef.current) {
+      connectionRef.current.send(currentMessage);
+      setMessages(prevMessages => [...prevMessages, { text: currentMessage, sender: 'local' }]);
+      setCurrentMessage('');
+    }
+  }
+
+  const toggleMic = () => {
+    if (userStreamRef.current) {
+      const audioTrack = userStreamRef.current.getAudioTracks()[0];
+      audioTrack.enabled = !audioTrack.enabled;
+      setIsMicOn(audioTrack.enabled);
+    }
+  }
+
+  const toggleVideo = () => {
+    if (userStreamRef.current) {
+      const videoTrack = userStreamRef.current.getVideoTracks()[0];
+      videoTrack.enabled = !videoTrack.enabled;
+      setIsVideoOn(videoTrack.enabled);
+    }
   }
 
   const hangup = () => {
@@ -82,6 +155,18 @@ export default function PeerConnection() {
               <Search className='text-black'/>
             </button>
             <button
+              onClick={toggleMic}
+              className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
+            >
+              {isMicOn ? <MicIcon  className='h-5 w-5'/> : <MicOffIcon  className='h-5 w-5'/>}
+            </button>
+            <button
+              onClick={toggleVideo}
+              className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
+            >
+              {isVideoOn ? <VideoIcon  className='h-5 w-5'/> : <VideoOffIcon  className='h-5 w-5'/>}
+            </button>
+            <button
               onClick={hangup}
               disabled={!isCalling}
               className="h-14 w-14 flex items-center justify-center rounded-xl bg-[#ec6761] text-white disabled:brightness-75"
@@ -93,7 +178,23 @@ export default function PeerConnection() {
             <button className='bg-red-500'  onClick={() => call(remotePeerIdValue)}>Call</button>
           </div>
           <div className="flex flex-col space-x-4 absolute bottom-5 left-5">    
-            <UserCard />
+            <div className='bg-white rounded-lg min-h-52 p-3 px-3 w-[300px]'>
+              <div style={{ height: '200px', overflowY: 'scroll', marginBottom: '10px' }}>
+                {messages.map((msg, index) => (
+                  <div className={`font-semibold text-sm  rounded-xl p-1 px-3 ${ msg.sender === 'local' ? "rounded-tr-none bg-yellow-100" : " rounded-tl-none bg-orange-100"} mb-2 w-fit`} key={index} style={{ marginLeft: msg.sender === 'local' ? 'auto' : '0%' }}>
+                    {msg.text}
+                  </div>
+                ))}
+              </div>
+              <input 
+                type="text" 
+                className='border w-full'
+                value={currentMessage} 
+                onChange={e => setCurrentMessage(e.target.value)}
+                onKeyPress={e => e.key === 'Enter' && sendMessage()}
+              />
+            </div>
+            {/*<UserCard />*/}
             {/*<button
               onClick={handleStart}
               disabled={isStarted}
