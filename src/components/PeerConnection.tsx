@@ -28,10 +28,31 @@ export default function PeerConnection() {
     const peer = new Peer(undefined, {
       config: {
         iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:global.stun.twilio.com:3478' },
-          // Add your TURN server here
-        ]
+          {
+            urls: "stun:stun.relay.metered.ca:80",
+          },
+          {
+            urls: "turn:global.relay.metered.ca:80",
+            username: "9aefd3d63c51ed9793ee8477",
+            credential: "Wd33VTkVy8vG3bLz",
+          },
+          {
+            urls: "turn:global.relay.metered.ca:80?transport=tcp",
+            username: "9aefd3d63c51ed9793ee8477",
+            credential: "Wd33VTkVy8vG3bLz",
+          },
+          {
+            urls: "turn:global.relay.metered.ca:443",
+            username: "9aefd3d63c51ed9793ee8477",
+            credential: "Wd33VTkVy8vG3bLz",
+          },
+          {
+            urls: "turns:global.relay.metered.ca:443?transport=tcp",
+            username: "9aefd3d63c51ed9793ee8477",
+            credential: "Wd33VTkVy8vG3bLz",
+          },
+        ],
+        secure: false
       }
     });
     
@@ -60,11 +81,11 @@ export default function PeerConnection() {
       .then((mediaStream) => {
         userStreamRef.current = mediaStream;
         currentUserVideoRef.current.srcObject = mediaStream;
-        //currentUserVideoRef.current.play();
+        currentUserVideoRef.current.play();
         call.answer(mediaStream)
         call.on('stream', function(remoteStream) {
           remoteVideoRef.current.srcObject = remoteStream
-          //remoteVideoRef.current.play();
+          remoteVideoRef.current.play();
         });
       })
       .catch(err => {
@@ -78,13 +99,13 @@ export default function PeerConnection() {
         .then((mediaStream) => {
           userStreamRef.current = mediaStream;
           currentUserVideoRef.current.srcObject = mediaStream;
-          //currentUserVideoRef.current.play();
+          currentUserVideoRef.current.play();
 
           const call = peerInstance.current.call(remotePeerId, mediaStream)
 
           call.on('stream', (remoteStream) => {
             remoteVideoRef.current.srcObject = remoteStream
-            //remoteVideoRef.current.play();
+            remoteVideoRef.current.play();
           });
         })
         .catch(err => {
