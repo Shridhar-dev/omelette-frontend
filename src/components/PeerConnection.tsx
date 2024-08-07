@@ -164,7 +164,7 @@ export default function PeerConnection() {
   const getCalleeId = async() => {
     if(peerId.length === 0) return;
     const body = JSON.stringify({connectionId:peerId, category:"HACKERHOUSE"});
-    const response = await fetch(`${process.env.PRODUCTION_URL}/connect`,{
+    const response = await fetch(`https://aab-l1zcuq1yf-shridhardevs-projects.vercel.app/api/connect`,{
       method:"POST",
       headers:{
           "Content-Type": "application/json",
