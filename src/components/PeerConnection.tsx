@@ -21,6 +21,7 @@ export default function PeerConnection() {
   const connectionRef = useRef(null);
   const userStreamRef = useRef(null);
 
+  var iceArray = [{ "Credential": null, "Username": null, "Url": "stun:global.stun.twilio.com:3478?transport=udp", "Urls": "stun:global.stun.twilio.com:3478?transport=udp" }];
   useEffect(() => {
     setIsSecureContext(window.isSecureContext);
 
@@ -59,11 +60,11 @@ export default function PeerConnection() {
       .then((mediaStream) => {
         userStreamRef.current = mediaStream;
         currentUserVideoRef.current.srcObject = mediaStream;
-        currentUserVideoRef.current.play();
+        //currentUserVideoRef.current.play();
         call.answer(mediaStream)
         call.on('stream', function(remoteStream) {
           remoteVideoRef.current.srcObject = remoteStream
-          remoteVideoRef.current.play();
+          //remoteVideoRef.current.play();
         });
       })
       .catch(err => {
@@ -77,13 +78,13 @@ export default function PeerConnection() {
         .then((mediaStream) => {
           userStreamRef.current = mediaStream;
           currentUserVideoRef.current.srcObject = mediaStream;
-          currentUserVideoRef.current.play();
+          //currentUserVideoRef.current.play();
 
           const call = peerInstance.current.call(remotePeerId, mediaStream)
 
           call.on('stream', (remoteStream) => {
             remoteVideoRef.current.srcObject = remoteStream
-            remoteVideoRef.current.play();
+            //remoteVideoRef.current.play();
           });
         })
         .catch(err => {
