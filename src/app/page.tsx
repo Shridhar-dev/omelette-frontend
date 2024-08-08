@@ -17,26 +17,26 @@ export default function Home() {
       {<nav className='flex justify-between items-center fixed z-10 top-0 w-full px-20 py-10'>
         <p className='text-xl font-semibold text-black'>Omelette.</p>
         <div className='flex items-center gap-x-5 font-semibold'>
-          <Link href="/">Farm</Link>
+          <Link href="#info">Omelette?</Link>
           <Link href="/">FAQ</Link>
           <Link href="/">Discord</Link>
           <LoginButton />
         </div>
       </nav>}
 
-      <div className='grid grid-cols-3 pb-10 sm:pb-0 sm:h-screen overflow-hidden w-screen px-20 relative'>
-        <div className='col-span-3 mt-32'>
-          <p className='text-4xl text-center sm:text-8xl  font-black text-black mt-5'>Chat Securely, Connect Confidently, Personalized Matches!</p>
+      <div className='grid grid-cols-3 pb-10 sm:pb-0 h-screen overflow-hidden w-screen px-10 sm:px-20 relative'>
+        <div className='col-span-3 flex flex-col justify-center md:justify-start items-center mt-32'>
+          <p className='text-4xl text-center sm:text-7xl lg:text-8xl  font-black text-black mt-5'>Chat Securely, Connect Confidently, Personalized Matches!</p>
           <p className=' text-xl text-center sm:text-2xl mt-5'>Coming out of your shell is hard. Omelette makes it easy.</p>
           <div className='flex items-center justify-center gap-x-5 mt-4'>
-            <button  onClick={()=>push("/connect")} className='bg-black relative z-10 text-white font-semibold text-lg rounded-full px-6 py-2'>Start Hatching</button>
-            <button className='bg-white  font-semibold text-lg relative z-10 rounded-full px-6 py-2'>Join Farm</button>
+            <button  onClick={()=>push("/verify")} className='bg-black relative z-10 text-white font-semibold text-sm sm:text-lg rounded-full px-6 py-2'>Start Hatching</button>
+            <Link href="#info" className='bg-white  font-semibold text-sm sm:text-lg relative z-10 rounded-full px-6 py-2'>Omelette?</Link>
           </div>
         </div>
         <EggAnimation />
       </div>
       
-      <div className='min-h-screen bg-white relative grid grid-cols-1 md:grid-cols-2 w-full'>
+      <div id="info" className='min-h-screen bg-white relative grid grid-cols-1 md:grid-cols-2 w-full'>
         <div className=' sticky top-0 left-0 col-span-1 flex justify-center items-center p-5'>
           <Card />
         </div>

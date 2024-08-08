@@ -190,11 +190,9 @@ export default function PeerConnection() {
     <div className='flex flex-col h-screen p-4 max-h-screen'>
       <div className="flex flex-col flex-1 bg-black rounded-2xl overflow-hidden mb-4 relative">
         <div className={`absolute top-2 left-2 text-5xl duration-500 ${isCalling ? "translate-y-0" : " -translate-y-40"}`}>🚺</div>
-        <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/5 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
-        <video ref={remoteVideoRef} autoPlay playsInline  className="w-full h-full mr-2" />
-          
-          <div className='bg-gray-400 bg-opacity-80 absolute bottom-7 right-[16.5%] items-center rounded-full text-xs px-3 py-1 font-semibold flex gap-x-2'><div className={`h-2 w-2 rounded-full ${isStarted ? "bg-green-500" : "bg-red-500"}`}></div>You</div>
-          <div className='flex flex-col gap-y-2 absolute top-5 left-5'>
+          <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/2 h-[12rem] md:h-auto md:w-1/3 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
+          <video ref={remoteVideoRef} autoPlay playsInline  className="w-full h-full mr-2" />
+          <div className='flex gap-x-2 absolute top-5 left-5'>
             <button
               onClick={getCalleeId}
               //disabled={!isStarted || isCalling}
@@ -214,7 +212,7 @@ export default function PeerConnection() {
             >
               {isVideoOn ? <VideoIcon  className='h-5 w-5'/> : <VideoOffIcon  className='h-5 w-5'/>}
             </button>
-            <button
+            {/*<button
               onClick={hangup}
               disabled={!isCalling}
               className="h-14 w-14 flex items-center justify-center rounded-xl bg-[#ec6761] text-white disabled:brightness-75"
@@ -223,10 +221,10 @@ export default function PeerConnection() {
             </button>
             <h2 className='text-white'>{peerId}</h2>
             <input className='text-black' type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)} />
-            <button className='bg-red-500'  onClick={() => call(remotePeerIdValue)}>Call</button>
+            <button className='bg-red-500'  onClick={() => call(remotePeerIdValue)}>Call</button>*/}
           </div>
           <div className="flex flex-col space-x-4 absolute bottom-5 left-5">    
-            <div className='bg-white rounded-lg min-h-52 p-3 px-3 w-[300px]'>
+            <div className='bg-white hidden md:block rounded-lg min-h-52 p-3 px-3 w-[300px]'>
               <div style={{ height: '200px', overflowY: 'scroll', marginBottom: '10px' }}>
                 {messages.map((msg, index) => (
                   <div className={`font-semibold text-sm  rounded-xl p-1 px-3 ${ msg.sender === 'local' ? "rounded-tr-none bg-yellow-100" : " rounded-tl-none bg-orange-100"} mb-2 w-fit`} key={index} style={{ marginLeft: msg.sender === 'local' ? 'auto' : '0%' }}>

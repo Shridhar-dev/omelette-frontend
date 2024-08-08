@@ -19,6 +19,6 @@ export default function EggAnimation() {
   }, []);
 
   return (
-    <div className='w-full h-fit top-[23%] absolute' id="egg" ref={animationContainer}></div>
+    <div className='w-full h-fit top-[73%] sm:top-[63%] md:top-[50%] lg:top-[23%] absolute' id="egg" ref={animationContainer}></div>
   );
 }

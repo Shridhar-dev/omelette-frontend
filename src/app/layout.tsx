@@ -3,6 +3,7 @@ import './globals.css'
 import { Montserrat } from 'next/font/google'
 import { ThirdwebProvider } from "thirdweb/react";
 
+
 const inter = Montserrat({ subsets: ['latin'] })
 
 export default function RootLayout({
@@ -13,8 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        {/*@ts-ignore*/}
         <ThirdwebProvider>
-          {children}
+            {children}
         </ThirdwebProvider>
       </body>
     </html>
