@@ -109,7 +109,7 @@ function Verify() {
               });
               let userProofData = await response.json()
               localStorage.setItem("user-proof", JSON.stringify(userProofData));
-              addUser()
+              await addUser()
               setLoading(false)
             }
           };
