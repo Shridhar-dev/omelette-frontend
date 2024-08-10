@@ -17,12 +17,12 @@ const config = {
         "2xl": "1400px",
       },
     },
+    
     extend: {
       backgroundImage:{
         "brandgrad":"linear-gradient(135deg, rgb(255, 168, 168) 10%, rgb(252, 255, 0) 100%)"
       },
       colors: {
-        brand:"#fefc53",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

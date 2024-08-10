@@ -12,6 +12,8 @@ import { packGroth16Proof } from '@anon-aadhaar/core';
 import { generateAccount } from 'thirdweb/wallets';
 import { client } from '../../components/LoginButton';
 import { BASE_URL } from '@/lib/utils';
+import { Toaster } from "@/components/ui/toaster"
+import { useToast } from '@/components/ui/use-toast';
 
 
 function Verify() {
@@ -20,11 +22,12 @@ function Verify() {
     const account = useActiveAccount();
     const [loading, setLoading] = useState(false)
     const { push } = useRouter();
+    const { toast } = useToast()
     
     useEffect(()=>{
       
       if(!account?.address){
-        push("/");
+        //push("/");
       }
     },[account])
 
@@ -77,7 +80,14 @@ function Verify() {
   }
 
   const submitQR = async() => {
-      setLoading(true)
+      setLoading(true);
+      if(!account?.address){
+         toast({
+          title: "❌ Cannot verify without logging in!",
+        })
+        setLoading(false)
+        return;
+      }
       if (file) {
         const reader = new FileReader();
         let qr:string;
@@ -151,7 +161,8 @@ function Verify() {
                 </div>
             </div>
             <button disabled={loading} onClick={submitQR} className='text-lg flex items-center justify-center gap-x-2 font-semibold bg-black text-white w-full rounded-md py-2 mt-2'>Submit {loading && <LoaderCircle className=' animate-spin duration-500 text-white'/>}</button>
-            <p className='text-sm'>{loading && "Good things take time, whether it's verifying Aadhaar or making an omelette"}</p>
+            <p className='text-sm mt-5'>{loading && "Good things take time, whether it's verifying Aadhaar or making an omelette"}</p>
+            <Toaster />
         </div>
     </div>
   )
