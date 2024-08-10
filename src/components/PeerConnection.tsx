@@ -2,8 +2,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { CameraIcon, Check, LeafIcon, MicIcon, MicOffIcon, MusicIcon, Phone, Power, Rocket, Search, SearchCheck, VideoIcon, VideoOffIcon } from 'lucide-react'
+import { CameraIcon, Check, LeafIcon, LoaderCircleIcon, MicIcon, MicOffIcon, MusicIcon, Phone, Power, Rocket, Search, SearchCheck, VideoIcon, VideoOffIcon } from 'lucide-react'
 import Peer from 'peerjs';
+import { BASE_URL } from '@/lib/utils';
 
 export default function PeerConnection() {
   const [peerId, setPeerId] = useState('');
@@ -165,7 +166,7 @@ export default function PeerConnection() {
     if(peerId.length === 0) return;
     const body = JSON.stringify({connectionId:peerId, category:"HACKERHOUSE"});
     window.onbeforeunload = async(event) => {
-      const response = await fetch(`https://aab-plum.vercel.app/api/connection/disconnect`,{
+      const response = await fetch(`${BASE_URL}/connection/disconnect`,{
         method:"POST",
         headers:{
             "Content-Type": "application/json",
@@ -174,7 +175,7 @@ export default function PeerConnection() {
       });
     };
 
-    const response = await fetch(`https://aab-plum.vercel.app/api/connection/connect`,{
+    const response = await fetch(`${BASE_URL}/connection/connect`,{
       method:"POST",
       headers:{
           "Content-Type": "application/json",
@@ -183,75 +184,74 @@ export default function PeerConnection() {
     });
     const { calleeId } = await response.json();
     if(calleeId === "") setIsCalling(true);
-    else call(calleeId);
+    else { setIsCalling(false); call(calleeId);}
   }
 
   return (
-    <div className='flex flex-col h-screen p-4 max-h-screen'>
-      <div className="flex flex-col flex-1 bg-black rounded-2xl overflow-hidden mb-4 relative">
-        <div className={`absolute top-2 left-2 text-5xl duration-500 ${isCalling ? "translate-y-0" : " -translate-y-40"}`}>🚺</div>
-          <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/2 h-[12rem] md:h-auto md:w-1/3 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
-          <video ref={remoteVideoRef} autoPlay playsInline  className="w-full h-full mr-2" />
-          <div className='flex gap-x-2 absolute top-5 left-5'>
-            <button
-              onClick={getCalleeId}
-              //disabled={!isStarted || isCalling}
-              className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-white disabled:brightness-75"
-            >
-              <Search className='text-black'/>
-            </button>
-            <button
-              onClick={toggleMic}
-              className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
-            >
-              {isMicOn ? <MicIcon  className='h-5 w-5'/> : <MicOffIcon  className='h-5 w-5'/>}
-            </button>
-            <button
-              onClick={toggleVideo}
-              className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
-            >
-              {isVideoOn ? <VideoIcon  className='h-5 w-5'/> : <VideoOffIcon  className='h-5 w-5'/>}
-            </button>
-            {/*<button
-              onClick={hangup}
-              disabled={!isCalling}
-              className="h-14 w-14 flex items-center justify-center rounded-xl bg-[#ec6761] text-white disabled:brightness-75"
-            >
-              <Power />
-            </button>
-            <h2 className='text-white'>{peerId}</h2>
-            <input className='text-black' type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)} />
-            <button className='bg-red-500'  onClick={() => call(remotePeerIdValue)}>Call</button>*/}
-          </div>
-          <div className="flex flex-col space-x-4 absolute bottom-5 left-5">    
-            <div className='bg-white hidden md:block rounded-lg min-h-52 p-3 px-3 w-[300px]'>
-              <div style={{ height: '200px', overflowY: 'scroll', marginBottom: '10px' }}>
-                {messages.map((msg, index) => (
-                  <div className={`font-semibold text-sm  rounded-xl p-1 px-3 ${ msg.sender === 'local' ? "rounded-tr-none bg-yellow-100" : " rounded-tl-none bg-orange-100"} mb-2 w-fit`} key={index} style={{ marginLeft: msg.sender === 'local' ? 'auto' : '0%' }}>
-                    {msg.text}
-                  </div>
-                ))}
-              </div>
-              <input 
-                type="text" 
-                className='border w-full'
-                value={currentMessage} 
-                onChange={e => setCurrentMessage(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && sendMessage()}
-              />
+    <div className='grid  grid-cols-12 gap-x-4'>
+      <div className='col-span-9 flex flex-col h-screen p-4 pr-0 max-h-screen'>
+        <div className="flex flex-col justify-center items-center flex-1 mb-4 relative">
+          {/*<div className={`absolute top-2 left-2 text-5xl duration-500 ${isCalling ? "translate-y-0" : " -translate-y-40"}`}>🚺</div>*/}
+            <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/2 h-[12rem] md:h-auto md:w-1/3 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
+            <video ref={remoteVideoRef} autoPlay playsInline  className="w-full rounded-2xl h-full mr-2 bg-black border-white border-2" />
+            <div className='flex gap-x-2 absolute bottom-4 left-3'>
+              <button
+                onClick={getCalleeId}
+                className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-white disabled:brightness-75"
+              >
+                <Search className='text-black'/>
+              </button>
+              <button
+                onClick={toggleMic}
+                className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
+              >
+                {isMicOn ? <MicIcon  className='h-5 w-5'/> : <MicOffIcon  className='h-5 w-5'/>}
+              </button>
+              <button
+                onClick={toggleVideo}
+                className="h-14 w-14 flex items-center justify-center rounded-xl bg-white text-black disabled:brightness-75"
+              >
+                {isVideoOn ? <VideoIcon  className='h-5 w-5'/> : <VideoOffIcon  className='h-5 w-5'/>}
+              </button>
             </div>
-            {/*<UserCard />*/}
-            {/*<button
-              onClick={handleStart}
-              disabled={isStarted}
-              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
-            >
-              <Rocket />
-            </button>*/}
+            {
+              isCalling &&
+              <div className={`absolute flex flex-col items-center justify-center text-white text-5xl duration-500`}>
+                <div className=' animate-spin'><LoaderCircleIcon className='h-20 w-20'/></div>
+                <p className=' text-xl mt-5'>Searching...</p>
+              </div>
+            }
         </div>
+        
+        
       </div>
-      
-      
+      <div className="col-span-3 flex flex-col p-4 pl-0">    
+              <div className='bg-white overflow-hidden flex-[0.98] relative w-full hidden md:block rounded-lg min-h-52 p-3 px-3'>
+                <div style={{ height: '100%', overflowY: 'scroll', marginBottom: '10px' }}>
+                  {messages.map((msg, index) => (
+                    <div className={`font-semibold text-sm  rounded-xl p-1 px-3 ${ msg.sender === 'local' ? "rounded-tr-none bg-yellow-100" : " rounded-tl-none bg-orange-100"} mb-2 w-fit`} key={index} style={{ marginLeft: msg.sender === 'local' ? 'auto' : '0%' }}>
+                      {msg.text}
+                    </div>
+                  ))}
+                </div>
+                
+                <input 
+                  type="text" 
+                  className='w-full  bg-[rgba(0,0,0,0.02)] h-12 absolute top-[94%] rounded-xl left-0 px-4 '
+                  value={currentMessage} 
+                  onChange={e => setCurrentMessage(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && sendMessage()}
+                />
+              </div>
+              {/*<UserCard />*/}
+              {/*<button
+                onClick={handleStart}
+                disabled={isStarted}
+                className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
+              >
+                <Rocket />
+              </button>*/}
+        </div>
     </div>
   )
 }

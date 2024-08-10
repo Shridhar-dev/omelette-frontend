@@ -8,7 +8,7 @@ import Women from '@/assets/stockw.jpeg'
 import { CameraIcon, LeafIcon, MusicIcon } from 'lucide-react';
 import EggAnimation from '@/components/EggAnimation';
 import LoginButton from '@/components/LoginButton';
-
+import AppImage from "@/assets/app.png";
 
 export default function Home() {
   const { push } = useRouter();
@@ -44,6 +44,17 @@ export default function Home() {
           <p className='text-4xl md:text-7xl font-black md:leading-[5rem]'>Verify your Identify. Make new Frens</p>
           <p className='mt-5 text-xl leading-10'>Introducing our revolutionary chat app that puts safety and personalization at the forefront of your online interactions. With Aadhaar-based verification, we ensure that only verified adults can join the conversation, creating a secure environment where you can connect with confidence. Whether youre looking to meet new friends, engage in meaningful conversations, or simply pass the time, our app offers a seamless experience tailored to your preferences. Our intuitive gender filter allows you to choose whether you want to chat with males or females, giving you the power to customize your connections. Say goodbye to the uncertainty of anonymous chats and hello to a community of genuine, like-minded individuals. Join us today and discover the difference of chatting with confidence!</p>
         </div>
+      </div>
+
+      <div className='flex items-center justify-center text-center flex-col py-10'>
+        <p className='text-7xl font-black my-5'>Full Privacy,<br/> Seamless Connection</p>
+        <Image 
+          src={AppImage.src}
+          height={AppImage.height-500}
+          width={AppImage.width-500}
+          alt=''
+          className=''
+        />
       </div>
       {/*<div className='min-h-screen py-10 flex flex-col items-center relative justify-center bg-black bg-opacity-[2%] w-full'>
           <Card />

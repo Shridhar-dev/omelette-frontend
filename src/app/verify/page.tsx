@@ -10,6 +10,7 @@ import { ethers } from 'ethers';
 import { packGroth16Proof } from '@anon-aadhaar/core';
 import { generateAccount } from 'thirdweb/wallets';
 import { client } from '../../components/LoginButton';
+import { BASE_URL } from '@/lib/utils';
 
 
 function Verify() {
@@ -27,8 +28,7 @@ function Verify() {
     },[account])
 
   
-  async function gaslessAnonAadhaarIdentity(proofData:any, address:string) {
-    const account = await generateAccount({ client });
+  async function gaslessAnonAadhaarIdentity(proofData:any) {
     
     const nullifierSeed = proofData.proof.nullifierSeed;
     const nullifier = proofData.proof.nullifier;
@@ -65,7 +65,7 @@ function Verify() {
     const signature = await account?.signMessage({message:{ raw : message}});
     console.log("sig: ", signature)
     const body = JSON.stringify({address:account?.address, nullifierSeed, nullifier, timestamp, signal:account?.address, revealArray, groth16Proof, nonce:Date.now(), signature});
-    const response = await fetch("https://aab-plum.vercel.app/api/user/transact",{
+    const response = await fetch(`${BASE_URL}/user/transact`,{
       method:"POST",
       headers:{
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ function Verify() {
               }
               console.log(qr)
               const body = JSON.stringify({qrCode:qr, signal:account?.address});
-              const response = await fetch("https://aab-plum.vercel.app/api/proof/generate",{
+              const response = await fetch(`${BASE_URL}/proof/generate`,{
                       method:"POST",
                       headers:{
                           "Content-Type": "application/json",
@@ -129,7 +129,7 @@ function Verify() {
   const addUser = async() => {
     const userProofData = localStorage.getItem("user-proof");
     const proof = await JSON.parse(userProofData!).proof;
-      //await gaslessAnonAadhaarIdentity(proof, account?.address);
+    await gaslessAnonAadhaarIdentity(proof);
     push("/connect")
   }
   return (
@@ -150,7 +150,7 @@ function Verify() {
                 </div>
             </div>
             <button disabled={loading} onClick={submitQR} className='text-lg flex items-center justify-center gap-x-2 font-semibold bg-black text-white w-full rounded-md py-2 mt-2'>Submit {loading && <LoaderCircle className=' animate-spin duration-500 text-white'/>}</button>
-            <p>{loading && "Good things take time, whether it's verifying Aadhaar or making an omelette"}</p>
+            <p className='text-sm'>{loading && "Good things take time, whether it's verifying Aadhaar or making an omelette"}</p>
         </div>
     </div>
   )
