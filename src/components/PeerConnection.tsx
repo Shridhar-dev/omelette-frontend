@@ -79,6 +79,7 @@ export default function PeerConnection() {
   }, [isSecureContext]);
 
   const handleIncomingCall = (call) => {
+    setIsCalling(false);
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((mediaStream) => {
         userStreamRef.current = mediaStream;
