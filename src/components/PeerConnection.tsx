@@ -189,11 +189,11 @@ export default function PeerConnection() {
 
   return (
     <div className='grid  grid-cols-12 gap-x-4'>
-      <div className='col-span-9 flex flex-col h-screen p-4 pr-0 max-h-screen'>
+      <div className='col-span-12 md:col-span-9 flex flex-col h-screen p-4 pr-0 max-h-screen'>
         <div className="flex flex-col justify-center items-center flex-1 mb-4 relative">
           {/*<div className={`absolute top-2 left-2 text-5xl duration-500 ${isCalling ? "translate-y-0" : " -translate-y-40"}`}>🚺</div>*/}
             <video ref={currentUserVideoRef} autoPlay muted playsInline className="w-1/2 h-[12rem] md:h-auto md:w-1/3 rounded-2xl border-white bg-black border-2 ml-2 absolute bottom-5 right-5" />
-            <video ref={remoteVideoRef} autoPlay playsInline  className="w-full rounded-2xl h-full mr-2 bg-black border-white border-2" />
+            <video ref={remoteVideoRef} autoPlay playsInline  className="w-full rounded-2xl h-full max-h-[95vh] overflow-hidden mr-2 bg-black border-white border-2" />
             <div className='flex gap-x-2 absolute bottom-4 left-3'>
               <button
                 onClick={getCalleeId}
@@ -225,7 +225,7 @@ export default function PeerConnection() {
         
         
       </div>
-      <div className="col-span-3 flex flex-col p-4 pl-0">    
+      <div className="col-span-0 hidden md:flex md:col-span-3 flex-col p-4 pl-0">    
               <div className='bg-white overflow-hidden flex-[0.98] relative w-full hidden md:block rounded-lg min-h-52 p-3 px-3'>
                 <div style={{ height: '100%', overflowY: 'scroll', marginBottom: '10px' }}>
                   {messages.map((msg, index) => (
