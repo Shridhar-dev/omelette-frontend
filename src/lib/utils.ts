@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const BASE_URL = "https://184.105.118.135/api"
+export const BASE_URL = "https://omelette.centralindia.cloudapp.azure.com/api"
