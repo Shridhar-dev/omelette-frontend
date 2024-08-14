@@ -9,6 +9,7 @@ import { CameraIcon, LeafIcon, MusicIcon } from 'lucide-react';
 import EggAnimation from '@/components/EggAnimation';
 import LoginButton from '@/components/LoginButton';
 import AppImage from "@/assets/app.png";
+import Dropdown from '@/components/Dropdown';
 
 export default function Home() {
   const { push } = useRouter();
@@ -20,6 +21,7 @@ export default function Home() {
           <Link href="#info">Omelette?</Link>
           <Link href="/">FAQ</Link>
           <Link href="/">Discord</Link>
+          <Dropdown />
           <LoginButton />
         </div>
       </nav>}
